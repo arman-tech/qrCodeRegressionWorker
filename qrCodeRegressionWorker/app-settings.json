@@ -1,0 +1,5 @@
+{
+  "qrCodeImageDirectory": "qr-code-images",
+  "maxConcurrentDownloads": 3,
+  "iterations": 10
+}
