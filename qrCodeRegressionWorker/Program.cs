@@ -140,7 +140,6 @@ namespace qrCodeRegressionWorker {
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 // Log the call details
-                //await LogCallDetails(url, imagePath, statusCode);
                 return new LogEntry {
                     ImagePath = Path.GetFullPath(imagePath),
                     Url = url,
@@ -152,11 +151,19 @@ namespace qrCodeRegressionWorker {
             catch (HttpRequestException e) {
                 Console.WriteLine($"Request error for {url}: {e.Message}");
                 // Log the error with an appropriate status code
-                //await LogCallDetails(url, imagePath, "RequestError");
                 return new LogEntry {
                     ImagePath = Path.GetFullPath(imagePath),
                     Url = url,
                     StatusCode = "RequestError",
+                    TimeOfCall = DateTime.UtcNow.ToString("o")
+                };
+            }
+            catch (TaskCanceledException e) {
+                Console.WriteLine($"Request timeout for {url}: {e.Message}");
+                return new LogEntry {
+                    ImagePath = Path.GetFullPath(imagePath),
+                    Url = url,
+                    StatusCode = "Timeout",
                     TimeOfCall = DateTime.UtcNow.ToString("o")
                 };
             }
